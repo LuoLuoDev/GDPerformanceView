@@ -265,7 +265,8 @@
     CGRect frame = CGRectZero;
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     if (window) {
-        frame = CGRectMake(0.0f, 0.0f, CGRectGetWidth(window.bounds), 20.0f);
+        CGFloat statusbarHeight = CGRectGetMaxY([UIApplication sharedApplication].statusBarFrame);
+        frame = CGRectMake(0.0f, statusbarHeight, CGRectGetWidth(window.bounds), 20);
     }
     return frame;
 }
@@ -282,15 +283,20 @@
     NSString *monitoringString = [NSString stringWithFormat:@"FPS : %d CPU : %.1f%%%@", fpsValue, cpuValue, self.versionsString];
     
     [self.monitoringTextLabel setText:monitoringString];
-    [self layoutTextLabel];
+//    [self layoutTextLabel];
 }
 
 - (void)layoutTextLabel {
     CGFloat windowWidth = CGRectGetWidth(self.bounds);
     CGFloat windowHeight = CGRectGetHeight(self.bounds);
-    CGSize labelSize = [self.monitoringTextLabel sizeThatFits:CGSizeMake(windowWidth, windowHeight)];
-    
-    [self.monitoringTextLabel setFrame:CGRectMake((windowWidth - labelSize.width) / 2.0f, (windowHeight - labelSize.height) / 2.0f, labelSize.width, labelSize.height)];
+//    CGSize labelSize = [self.monitoringTextLabel sizeThatFits:CGSizeMake(windowWidth, windowHeight)];
+//
+//    [self.monitoringTextLabel setFrame:CGRectMake((windowWidth - labelSize.width) / 2.0f, (windowHeight - labelSize.height) / 2.0f, labelSize.width, labelSize.height)];
+
+    // for better performace, set frame fixed
+        CGFloat width = 120;
+        CGFloat height = 20;
+        [self.monitoringTextLabel setFrame:CGRectMake(windowWidth - width, (windowHeight - height) / 2.0f, width, height)];
 }
 
 - (void)layoutWindow {
